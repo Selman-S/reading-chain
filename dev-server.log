@@ -67,3 +67,7 @@
  GET /api/auth/csrf 200 in 23ms
  POST /api/auth/callback/credentials? 200 in 259ms
  GET /api/auth/session 200 in 15ms
+ ✓ Compiled in 514ms (1210 modules)
+ ✓ Compiled in 708ms (1053 modules)
+ ✓ Compiled in 337ms (1053 modules)
+ ✓ Compiled in 546ms (1053 modules)
