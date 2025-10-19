@@ -43,9 +43,19 @@ function LoginForm() {
 
       // Başarılı giriş - ana sayfaya yönlendir
       if (result?.ok) {
-        // Cookie'nin set olması için kısa bir bekleme, sonra hard redirect
-        await new Promise(resolve => setTimeout(resolve, 200));
-        window.location.href = '/';
+        console.log('✅ Login başarılı, yönlendiriliyor...');
+        // Cookie'nin set olması için kısa bir bekleme
+        await new Promise(resolve => setTimeout(resolve, 500));
+        console.log('📍 Ana sayfaya yönlendirme yapılıyor...');
+        // Next.js router ile yönlendir
+        router.push('/');
+        // Fallback: 1 saniye sonra hala yönlenmediyse hard redirect
+        setTimeout(() => {
+          if (window.location.pathname === '/login') {
+            console.log('⚠️ Router çalışmadı, hard redirect yapılıyor');
+            window.location.replace('/');
+          }
+        }, 1000);
       }
     } catch (err) {
       setError('Bir hata oluştu. Lütfen tekrar deneyin.');

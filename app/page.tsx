@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, Suspense } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import Navigation from '@/components/Navigation';
@@ -25,6 +25,7 @@ export default function Home() {
   const router = useRouter();
   const [stats, setStats] = useState<Stats | null>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     if (status === 'unauthenticated') {
@@ -37,12 +38,26 @@ export default function Home() {
   const fetchStats = async () => {
     try {
       const res = await fetch('/api/stats');
+      if (!res.ok) {
+        throw new Error(`API Error: ${res.status}`);
+      }
       const data = await res.json();
       if (data.success) {
         setStats(data.data);
+      } else {
+        setError(data.error || 'Veri yüklenemedi');
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error('İstatistikler yüklenemedi:', error);
+      setError(error.message);
+      // Hata durumunda varsayılan değerler
+      setStats({
+        streak: { current: 0, longest: 0, lastReadDate: null },
+        totalPagesRead: 0,
+        readingCount: 0,
+        averagePerDay: 0,
+        activeBooks: 0,
+      });
     } finally {
       setLoading(false);
     }
