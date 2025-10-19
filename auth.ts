@@ -21,6 +21,10 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       }
       return session;
     },
+    authorized: async ({ auth }) => {
+      // Runs on every request with middleware
+      return !!auth;
+    },
   },
   secret: process.env.AUTH_SECRET,
 });
