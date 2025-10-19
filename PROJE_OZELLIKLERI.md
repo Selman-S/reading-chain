@@ -398,6 +398,16 @@ NEXTAUTH_URL=https://your-domain.vercel.app
 - Session kontrolü tüm sayfalara eklendi
 - Loading states iyileştirildi
 
+### 6. Service Worker Cache Sorunu
+
+**Sorun**: Login sonrası sayfa yenilediğinde ERR_FAILED hatası
+**Çözüm**:
+
+- Service Worker stratejisi Cache-First'ten **Network-First'e** değiştirildi
+- API ve auth istekleri cache bypass edildi
+- Sadece statik dosyalar (images, icons) cache'leniyor
+- Cache version v2 ile eski cache'ler otomatik temizleniyor
+
 ---
 
 ## 📝 Geliştirme Notları
@@ -422,17 +432,16 @@ npm start  # Production mode
 2. MongoDB URI ekle
 3. AUTH_SECRET generate et: `openssl rand -base64 32`
 4. NEXTAUTH_URL ekle (dev: http://localhost:3000)
-5. 
 
+**Örnek `.env.local` dosyası:**
+```env
 # MongoDB Connection
-
-MONGODB_URI=mongodb+srv://gunduzgece546_db_user:Kt3vJQLKCUgquwyO@cluster0.in5t1dv.mongodb.net/reading-chain
+MONGODB_URI=your_mongodb_uri_here
 
 # NextAuth Configuration
-
-AUTH_SECRET=ZQ7jqPZn7cArfAZrjJCwHw1hBXBfuZG4h10bRdhOdxc=
-
+AUTH_SECRET=your_generated_secret_here
 NEXTAUTH_URL=http://localhost:3000
+```
 
 ---
 
