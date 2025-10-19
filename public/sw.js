@@ -1,14 +1,15 @@
-// Service Worker for PWA
-const CACHE_NAME = 'reading-chain-v1';
+// Service Worker for PWA - Network First Strategy
+const CACHE_NAME = 'reading-chain-v2'; // Version artırıldı
 const urlsToCache = [
-  '/',
-  '/books',
-  '/stats',
-  '/settings',
+  '/favicon.ico',
+  '/icon-192x192.png',
+  '/icon-512x512.png',
+  '/manifest.json',
 ];
 
-// Install event
+// Install event - Skip waiting for immediate activation
 self.addEventListener('install', (event) => {
+  self.skipWaiting();
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
       return cache.addAll(urlsToCache);
@@ -16,16 +17,7 @@ self.addEventListener('install', (event) => {
   );
 });
 
-// Fetch event
-self.addEventListener('fetch', (event) => {
-  event.respondWith(
-    caches.match(event.request).then((response) => {
-      return response || fetch(event.request);
-    })
-  );
-});
-
-// Activate event
+// Activate event - Clean old caches
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys().then((cacheNames) => {
@@ -37,6 +29,33 @@ self.addEventListener('activate', (event) => {
         })
       );
     })
+  );
+  return self.clients.claim();
+});
+
+// Fetch event - Network First, Cache Fallback
+self.addEventListener('fetch', (event) => {
+  // API ve auth istekleri için cache kullanma
+  if (event.request.url.includes('/api/') || event.request.url.includes('/auth/')) {
+    return;
+  }
+
+  event.respondWith(
+    fetch(event.request)
+      .then((response) => {
+        // Sadece statik dosyaları cache'le
+        if (response.status === 200 && event.request.url.match(/\.(png|jpg|jpeg|svg|css|js|ico)$/)) {
+          const responseToCache = response.clone();
+          caches.open(CACHE_NAME).then((cache) => {
+            cache.put(event.request, responseToCache);
+          });
+        }
+        return response;
+      })
+      .catch(() => {
+        // Network başarısız olursa cache'ten dön
+        return caches.match(event.request);
+      })
   );
 });
 
