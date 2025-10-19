@@ -5,6 +5,16 @@ export interface IUser {
   username: string;
   email: string;
   password: string;
+  avatar: string; // Emoji avatar
+  bio?: string;
+  // Cached stats (güncelleme için background job veya reading sonrası)
+  totalPagesRead: number;
+  totalBooksCompleted: number;
+  currentStreak: number;
+  longestStreak: number;
+  // Privacy settings
+  profilePublic: boolean; // Profil herkese açık mı?
+  showStatsToFriends: boolean; // İstatistikler sadece arkadaşlara
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -34,6 +44,40 @@ const UserSchema = new Schema<IUser>(
       type: String,
       required: [true, 'Şifre gereklidir'],
       minlength: [6, 'Şifre en az 6 karakter olmalıdır'],
+    },
+    avatar: {
+      type: String,
+      default: '😊',
+      required: false,
+    },
+    bio: {
+      type: String,
+      maxlength: [200, 'Bio en fazla 200 karakter olabilir'],
+      required: false,
+    },
+    totalPagesRead: {
+      type: Number,
+      default: 0,
+    },
+    totalBooksCompleted: {
+      type: Number,
+      default: 0,
+    },
+    currentStreak: {
+      type: Number,
+      default: 0,
+    },
+    longestStreak: {
+      type: Number,
+      default: 0,
+    },
+    profilePublic: {
+      type: Boolean,
+      default: true,
+    },
+    showStatsToFriends: {
+      type: Boolean,
+      default: true,
     },
   },
   {

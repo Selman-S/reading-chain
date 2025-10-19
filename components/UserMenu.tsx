@@ -1,18 +1,41 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { signOut, useSession } from 'next-auth/react';
-import { LogOut, User, Settings as SettingsIcon } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { LogOut, User as UserIcon, Settings as SettingsIcon } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import Avatar from './Avatar';
 
 export default function UserMenu() {
   const { data: session } = useSession();
+  const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
+  const [avatar, setAvatar] = useState('😊');
+
+  useEffect(() => {
+    // Fetch user avatar
+    if (session?.user?.id) {
+      fetch('/api/profile')
+        .then(res => res.json())
+        .then(data => {
+          if (data.success && data.data.avatar) {
+            setAvatar(data.data.avatar);
+          }
+        })
+        .catch(err => console.error('Avatar fetch error:', err));
+    }
+  }, [session]);
 
   if (!session?.user) return null;
 
   const handleSignOut = () => {
     signOut({ callbackUrl: '/login' });
+  };
+
+  const handleMenuClick = (path: string) => {
+    setIsOpen(false);
+    router.push(path);
   };
 
   return (
@@ -21,17 +44,7 @@ export default function UserMenu() {
         onClick={() => setIsOpen(!isOpen)}
         className="flex items-center gap-2 bg-white dark:bg-gray-800 rounded-full px-3 py-2 shadow-md hover:shadow-lg transition-all border-2 border-gray-200 dark:border-gray-700"
       >
-        {session.user.image ? (
-          <img
-            src={session.user.image}
-            alt={session.user.name || 'User'}
-            className="w-8 h-8 rounded-full"
-          />
-        ) : (
-          <div className="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center">
-            <User className="w-5 h-5 text-white" />
-          </div>
-        )}
+        <Avatar avatar={avatar} size="xs" className="shadow-none" />
         <span className="font-medium text-gray-900 dark:text-white hidden sm:block">
           {session.user.name?.split(' ')[0]}
         </span>
@@ -56,17 +69,7 @@ export default function UserMenu() {
               {/* User Info */}
               <div className="p-4 border-b border-gray-200 dark:border-gray-700">
                 <div className="flex items-center gap-3">
-                  {session.user.image ? (
-                    <img
-                      src={session.user.image}
-                      alt={session.user.name || 'User'}
-                      className="w-12 h-12 rounded-full"
-                    />
-                  ) : (
-                    <div className="w-12 h-12 rounded-full bg-blue-600 flex items-center justify-center">
-                      <User className="w-6 h-6 text-white" />
-                    </div>
-                  )}
+                  <Avatar avatar={avatar} size="sm" className="shadow-none" />
                   <div className="flex-1 min-w-0">
                     <p className="font-semibold text-gray-900 dark:text-white truncate">
                       {session.user.name}
@@ -80,6 +83,21 @@ export default function UserMenu() {
 
               {/* Menu Items */}
               <div className="py-2">
+                <button
+                  onClick={() => handleMenuClick('/profile')}
+                  className="w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors text-gray-900 dark:text-white"
+                >
+                  <UserIcon className="w-5 h-5" />
+                  <span className="font-medium">Profilim</span>
+                </button>
+                <button
+                  onClick={() => handleMenuClick('/settings')}
+                  className="w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors text-gray-900 dark:text-white"
+                >
+                  <SettingsIcon className="w-5 h-5" />
+                  <span className="font-medium">Ayarlar</span>
+                </button>
+                <div className="border-t border-gray-200 dark:border-gray-700 my-2"></div>
                 <button
                   onClick={handleSignOut}
                   className="w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors text-red-600 dark:text-red-400"

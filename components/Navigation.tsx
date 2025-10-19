@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Home, BookOpen, BarChart3, Settings } from 'lucide-react';
+import { Home, BookOpen, BarChart3, Users, Trophy } from 'lucide-react';
 import UserMenu from './UserMenu';
 
 export default function Navigation() {
@@ -10,9 +10,10 @@ export default function Navigation() {
   
   const navItems = [
     { href: '/', icon: Home, label: 'Ana Sayfa' },
-    { href: '/books', icon: BookOpen, label: 'Kitaplarım' },
+    { href: '/books', icon: BookOpen, label: 'Kitaplar' },
+    { href: '/friends', icon: Users, label: 'Arkadaşlar' },
+    { href: '/badges', icon: Trophy, label: 'Ödüller' },
     { href: '/stats', icon: BarChart3, label: 'İstatistikler' },
-    { href: '/settings', icon: Settings, label: 'Ayarlar' },
   ];
   
   return (
