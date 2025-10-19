@@ -1,15 +1,26 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 import Navigation from '@/components/Navigation';
 import { Bell, Moon, Sun, Target, Download, Trash2 } from 'lucide-react';
 
 export default function SettingsPage() {
+  const { data: session, status } = useSession();
+  const router = useRouter();
   const [darkMode, setDarkMode] = useState(false);
   const [notificationsEnabled, setNotificationsEnabled] = useState(false);
   const [notificationTime, setNotificationTime] = useState('20:00');
   const [dailyGoal, setDailyGoal] = useState(25);
   const [notificationPermission, setNotificationPermission] = useState<NotificationPermission>('default');
+
+  // Session kontrolü
+  useEffect(() => {
+    if (status === 'unauthenticated') {
+      router.push('/login');
+    }
+  }, [status, router]);
 
   useEffect(() => {
     // Load settings from localStorage

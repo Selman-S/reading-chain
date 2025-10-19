@@ -1,6 +1,8 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 import Navigation from '@/components/Navigation';
 import { Plus, BookOpen, Trash2, Edit, Check, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -18,6 +20,8 @@ interface Book {
 }
 
 export default function BooksPage() {
+  const { data: session, status } = useSession();
+  const router = useRouter();
   const [books, setBooks] = useState<Book[]>([]);
   const [loading, setLoading] = useState(true);
   const [showAddForm, setShowAddForm] = useState(false);
@@ -32,8 +36,13 @@ export default function BooksPage() {
   });
 
   useEffect(() => {
-    fetchBooks();
-  }, [activeTab]);
+    if (status === 'unauthenticated') {
+      router.push('/login');
+    } else if (status === 'authenticated') {
+      fetchBooks();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [status, activeTab]);
 
   const fetchBooks = async () => {
     try {
@@ -102,12 +111,27 @@ export default function BooksPage() {
     return Math.min((book.currentPage / book.totalPages) * 100, 100);
   };
 
-  if (loading) {
+  if (status === 'loading') {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-blue-600 mx-auto mb-4"></div>
           <p className="text-gray-600 dark:text-gray-400">Yükleniyor...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (status === 'unauthenticated') {
+    return null;
+  }
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600 dark:text-gray-400">Kitaplar yükleniyor...</p>
         </div>
       </div>
     );
