@@ -33,7 +33,8 @@ export default function Home() {
     } else if (status === 'authenticated') {
       fetchStats();
     }
-  }, [status, router]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [status]);
 
   const fetchStats = async () => {
     try {
@@ -67,7 +68,8 @@ export default function Home() {
     fetchStats();
   };
 
-  if (status === 'loading' || loading) {
+  // Loading state
+  if (status === 'loading') {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
@@ -78,8 +80,21 @@ export default function Home() {
     );
   }
 
+  // Unauthenticated - redirect to login
   if (status === 'unauthenticated') {
-    return null; // Redirect edilirken boş göster
+    return null;
+  }
+
+  // Authenticated but stats still loading
+  if (status === 'authenticated' && loading && !stats) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600 dark:text-gray-400">Veriler yükleniyor...</p>
+        </div>
+      </div>
+    );
   }
 
   return (

@@ -61,3 +61,24 @@
  GET /api/stats 200 in 536ms
  GET /api/books?status=active 200 in 617ms
  GET /api/books?status=active 200 in 146ms
+ ✓ Compiled in 1231ms (1467 modules)
+ GET / 200 in 209ms
+ GET /login 200 in 205ms
+ ✓ Compiled /api/auth/[...nextauth] in 196ms (955 modules)
+ GET /api/auth/session 200 in 465ms
+ GET /api/auth/session 200 in 23ms
+ GET /api/auth/providers 200 in 19ms
+ GET /api/auth/csrf 200 in 11ms
+ POST /api/auth/callback/credentials? 200 in 257ms
+ GET /api/auth/session 200 in 15ms
+ GET / 200 in 84ms
+ ✓ Compiled /api/stats in 306ms (959 modules)
+ GET /api/stats 200 in 1074ms
+ ✓ Compiled /api/books in 403ms (961 modules)
+ GET /api/stats 200 in 609ms
+ GET /api/books?status=active 200 in 619ms
+ GET /api/books?status=active 200 in 148ms
+ ✓ Compiled in 1013ms (1467 modules)
+ GET / 200 in 304ms
+ ✓ Compiled in 370ms (1467 modules)
+ GET / 200 in 120ms
