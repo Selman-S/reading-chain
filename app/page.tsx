@@ -1,6 +1,8 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 import Navigation from '@/components/Navigation';
 import StreakDisplay from '@/components/StreakDisplay';
 import QuickReadingEntry from '@/components/QuickReadingEntry';
@@ -19,12 +21,18 @@ interface Stats {
 }
 
 export default function Home() {
+  const { data: session, status } = useSession();
+  const router = useRouter();
   const [stats, setStats] = useState<Stats | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetchStats();
-  }, []);
+    if (status === 'unauthenticated') {
+      router.push('/login');
+    } else if (status === 'authenticated') {
+      fetchStats();
+    }
+  }, [status, router]);
 
   const fetchStats = async () => {
     try {
@@ -44,7 +52,7 @@ export default function Home() {
     fetchStats();
   };
 
-  if (loading) {
+  if (status === 'loading' || loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
@@ -53,6 +61,10 @@ export default function Home() {
         </div>
       </div>
     );
+  }
+
+  if (status === 'unauthenticated') {
+    return null; // Redirect edilirken boş göster
   }
 
   return (

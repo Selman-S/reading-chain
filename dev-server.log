@@ -1,0 +1,69 @@
+
+> reading-chain@1.0.0 dev
+> next dev
+
+   ▲ Next.js 15.5.6
+   - Local:        http://localhost:3000
+   - Network:      http://192.168.1.154:3000
+   - Environments: .env.local, .env
+
+ ✓ Starting...
+ ✓ Ready in 2.3s
+ ✓ Compiled /middleware in 193ms (114 modules)
+ ○ Compiling /login ...
+ ✓ Compiled /login in 892ms (618 modules)
+ GET /login 200 in 1384ms
+ ✓ Compiled /signup in 401ms (627 modules)
+ GET /signup 200 in 672ms
+ ✓ Compiled /api/auth/[...nextauth] in 437ms (785 modules)
+ GET /api/auth/session 200 in 2493ms
+ GET /api/auth/session 200 in 25ms
+ ✓ Compiled /api/auth/signup in 230ms (787 modules)
+ POST /api/auth/signup 201 in 2891ms
+ GET /login?registered=true 200 in 79ms
+ GET /api/auth/providers 200 in 77ms
+ GET /api/auth/csrf 200 in 19ms
+ POST /api/auth/callback/credentials? 200 in 250ms
+ GET /api/auth/session 200 in 20ms
+ GET /signup 200 in 182ms
+ GET /api/auth/session 200 in 41ms
+ GET /api/auth/session 200 in 19ms
+ GET /login 200 in 62ms
+ GET /api/auth/session 200 in 30ms
+ GET /api/auth/session 200 in 19ms
+ GET /login 200 in 114ms
+ GET /login 200 in 55ms
+ GET /api/auth/session 200 in 22ms
+ GET /api/auth/session 200 in 10ms
+ GET /api/auth/providers 200 in 19ms
+ GET /api/auth/csrf 200 in 14ms
+ POST /api/auth/callback/credentials? 200 in 222ms
+ GET /api/auth/session 200 in 19ms
+ ✓ Compiled in 758ms (372 modules)
+ ✓ Compiled in 327ms (372 modules)
+ GET /login 200 in 91ms
+ GET /api/auth/session 200 in 33ms
+ GET /api/auth/session 200 in 19ms
+ GET /login 200 in 78ms
+ GET /api/auth/providers 200 in 21ms
+ GET /api/auth/csrf 200 in 10ms
+ POST /api/auth/callback/credentials? 200 in 264ms
+ GET /api/auth/session 200 in 18ms
+ ✓ Compiled in 829ms (642 modules)
+ GET /login 200 in 465ms
+ ✓ Compiled /api/auth/[...nextauth] in 169ms (541 modules)
+ GET /api/auth/session 200 in 445ms
+ GET /api/auth/session 200 in 16ms
+ ○ Compiling / ...
+ ✓ Compiled / in 2.5s (1610 modules)
+ HEAD / 200 in 2802ms
+ ✓ Compiled in 792ms (1624 modules)
+ ✓ Compiled in 416ms (1624 modules)
+ ✓ Compiled in 496ms (1624 modules)
+ GET /login 200 in 350ms
+ GET /api/auth/session 200 in 175ms
+ GET /api/auth/session 200 in 23ms
+ GET /api/auth/providers 200 in 23ms
+ GET /api/auth/csrf 200 in 23ms
+ POST /api/auth/callback/credentials? 200 in 259ms
+ GET /api/auth/session 200 in 15ms

@@ -2,21 +2,22 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
 export function middleware(request: NextRequest) {
-  // Login sayfası ve public assets için middleware'i atla
+  // Login, signup sayfaları ve public assets için middleware'i atla
   const isLoginPage = request.nextUrl.pathname === "/login";
+  const isSignupPage = request.nextUrl.pathname === "/signup";
   const isPublicFile =
     request.nextUrl.pathname.startsWith("/_next") ||
     request.nextUrl.pathname.startsWith("/api") ||
     request.nextUrl.pathname.includes(".");
 
-  if (isLoginPage || isPublicFile) {
+  if (isLoginPage || isSignupPage || isPublicFile) {
     return NextResponse.next();
   }
 
-  // Session cookie kontrolü (basit - NextAuth __Secure-next-auth.session-token)
+  // Session cookie kontrolü - Auth.js v5 cookie isimleri
   const sessionCookie =
-    request.cookies.get("__Secure-next-auth.session-token") ||
-    request.cookies.get("next-auth.session-token");
+    request.cookies.get("__Secure-authjs.session-token") ||
+    request.cookies.get("authjs.session-token");
 
   if (!sessionCookie) {
     // Session yok, login'e yönlendir
