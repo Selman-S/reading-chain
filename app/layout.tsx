@@ -4,6 +4,7 @@ import "./globals.css";
 import RegisterServiceWorker from "./register-sw";
 import { Providers } from "./providers";
 import PageTransition from "@/components/PageTransition";
+import { ThemeProvider } from "@/components/ThemeProvider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -31,14 +32,33 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="tr">
+    <html lang="tr" suppressHydrationWarning>
+      <head>
+        {/* Prevent flash of wrong theme */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                try {
+                  const darkMode = localStorage.getItem('darkMode') === 'true';
+                  if (darkMode) {
+                    document.documentElement.classList.add('dark');
+                  }
+                } catch (e) {}
+              })();
+            `,
+          }}
+        />
+      </head>
       <body className={inter.className}>
         <Providers>
-          <RegisterServiceWorker />
-          <PageTransition />
-          <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-gray-900 dark:to-gray-800">
-            {children}
-          </div>
+          <ThemeProvider>
+            <RegisterServiceWorker />
+            <PageTransition />
+            <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-gray-900 dark:to-gray-800">
+              {children}
+            </div>
+          </ThemeProvider>
         </Providers>
       </body>
     </html>

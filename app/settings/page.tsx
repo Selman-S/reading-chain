@@ -4,12 +4,13 @@ import { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import Navigation from '@/components/Navigation';
+import { useTheme } from '@/components/ThemeProvider';
 import { Bell, Moon, Sun, Target, Download, Trash2 } from 'lucide-react';
 
 export default function SettingsPage() {
   const { data: session, status } = useSession();
   const router = useRouter();
-  const [darkMode, setDarkMode] = useState(false);
+  const { theme, toggleTheme } = useTheme();
   const [notificationsEnabled, setNotificationsEnabled] = useState(false);
   const [notificationTime, setNotificationTime] = useState('20:00');
   const [dailyGoal, setDailyGoal] = useState(25);
@@ -24,38 +25,19 @@ export default function SettingsPage() {
 
   useEffect(() => {
     // Load settings from localStorage
-    const savedDarkMode = localStorage.getItem('darkMode') === 'true';
     const savedNotifications = localStorage.getItem('notificationsEnabled') === 'true';
     const savedTime = localStorage.getItem('notificationTime') || '20:00';
     const savedGoal = parseInt(localStorage.getItem('dailyGoal') || '25');
 
-    setDarkMode(savedDarkMode);
     setNotificationsEnabled(savedNotifications);
     setNotificationTime(savedTime);
     setDailyGoal(savedGoal);
-
-    // Apply dark mode
-    if (savedDarkMode) {
-      document.documentElement.classList.add('dark');
-    }
 
     // Check notification permission
     if ('Notification' in window) {
       setNotificationPermission(Notification.permission);
     }
   }, []);
-
-  const toggleDarkMode = () => {
-    const newMode = !darkMode;
-    setDarkMode(newMode);
-    localStorage.setItem('darkMode', String(newMode));
-    
-    if (newMode) {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-    }
-  };
 
   const requestNotificationPermission = async () => {
     if ('Notification' in window) {
@@ -203,7 +185,7 @@ export default function SettingsPage() {
         {/* Appearance */}
         <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg mb-6">
           <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
-            {darkMode ? <Moon className="w-5 h-5" /> : <Sun className="w-5 h-5" />}
+            {theme === 'dark' ? <Moon className="w-5 h-5" /> : <Sun className="w-5 h-5" />}
             Görünüm
           </h3>
           
@@ -215,14 +197,14 @@ export default function SettingsPage() {
               </p>
             </div>
             <button
-              onClick={toggleDarkMode}
+              onClick={toggleTheme}
               className={`relative inline-flex h-8 w-14 items-center rounded-full transition-colors ${
-                darkMode ? 'bg-blue-600' : 'bg-gray-300'
+                theme === 'dark' ? 'bg-blue-600' : 'bg-gray-300'
               }`}
             >
               <span
                 className={`inline-block h-6 w-6 transform rounded-full bg-white transition-transform ${
-                  darkMode ? 'translate-x-7' : 'translate-x-1'
+                  theme === 'dark' ? 'translate-x-7' : 'translate-x-1'
                 }`}
               />
             </button>

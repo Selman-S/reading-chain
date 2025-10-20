@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
+import { useTheme } from './ThemeProvider';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -40,6 +41,9 @@ interface ReadingChartProps {
 }
 
 export default function ReadingChart({ data, type = 'line' }: ReadingChartProps) {
+  const { theme } = useTheme();
+  const isDark = theme === 'dark';
+  
   // Son 30 günü göster
   const last30Days = data.slice(-30);
 
@@ -73,7 +77,7 @@ export default function ReadingChart({ data, type = 'line' }: ReadingChartProps)
         display: false,
       },
       tooltip: {
-        backgroundColor: 'rgba(0, 0, 0, 0.8)',
+        backgroundColor: isDark ? 'rgba(31, 41, 55, 0.95)' : 'rgba(0, 0, 0, 0.8)',
         padding: 12,
         titleFont: {
           size: 14,
@@ -96,14 +100,16 @@ export default function ReadingChart({ data, type = 'line' }: ReadingChartProps)
         ticks: {
           maxRotation: 45,
           minRotation: 45,
+          color: isDark ? 'rgba(156, 163, 175, 0.8)' : 'rgba(107, 114, 128, 0.8)',
         },
       },
       y: {
         beginAtZero: true,
         grid: {
-          color: 'rgba(0, 0, 0, 0.05)',
+          color: isDark ? 'rgba(75, 85, 99, 0.2)' : 'rgba(0, 0, 0, 0.05)',
         },
         ticks: {
+          color: isDark ? 'rgba(156, 163, 175, 0.8)' : 'rgba(107, 114, 128, 0.8)',
           callback: function (value: any) {
             return value + ' s';
           },
