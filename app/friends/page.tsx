@@ -6,6 +6,10 @@ import { useRouter } from 'next/navigation';
 import Navigation from '@/components/Navigation';
 import Avatar from '@/components/Avatar';
 import FriendsPageSkeleton from '@/components/skeletons/FriendsPageSkeleton';
+import LeaderboardSkeleton from '@/components/skeletons/LeaderboardSkeleton';
+import FriendsListSkeleton from '@/components/skeletons/FriendsListSkeleton';
+import FriendRequestsSkeleton from '@/components/skeletons/FriendRequestsSkeleton';
+import SearchResultsSkeleton from '@/components/skeletons/SearchResultsSkeleton';
 import {
   Users,
   Search,
@@ -421,10 +425,7 @@ function LeaderboardTab({
 
       {/* Leaderboard */}
       {loading ? (
-        <div className="text-center py-12">
-          <Loader2 className="w-8 h-8 animate-spin text-blue-600 mx-auto mb-2" />
-          <p className="text-gray-600 dark:text-gray-400">Yükleniyor...</p>
-        </div>
+        <LeaderboardSkeleton />
       ) : leaderboard.length > 0 ? (
         <div className="space-y-3">
           {leaderboard.map((entry, index) => (
@@ -506,10 +507,7 @@ function FriendsTab({
   return (
     <div>
       {loading ? (
-        <div className="text-center py-12">
-          <Loader2 className="w-8 h-8 animate-spin text-blue-600 mx-auto mb-2" />
-          <p className="text-gray-600 dark:text-gray-400">Yükleniyor...</p>
-        </div>
+        <FriendsListSkeleton />
       ) : friends.length > 0 ? (
         <div className="space-y-3">
           {friends.map((friend, index) => (
@@ -564,85 +562,87 @@ function RequestsTab({
   return (
     <div className="space-y-6">
       {/* Pending Requests */}
-      <div>
-        <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">
-          Gelen İstekler ({pending.length})
-        </h3>
-        {loading ? (
-          <div className="text-center py-12">
-            <Loader2 className="w-8 h-8 animate-spin text-blue-600 mx-auto mb-2" />
-          </div>
-        ) : pending.length > 0 ? (
-          <div className="space-y-3">
-            {pending.map((request) => (
-              <div
-                key={request._id}
-                className="bg-white dark:bg-gray-800 rounded-2xl p-4 shadow-md"
-              >
-                <div className="flex items-center gap-3">
-                  <Avatar avatar={request.user?.avatar} size="sm" />
-                  <div className="flex-1">
-                    <p className="font-semibold text-gray-900 dark:text-white">
-                      {request.user?.username}
-                    </p>
-                    <p className="text-xs text-gray-500 dark:text-gray-500">
-                      {new Date(request.createdAt).toLocaleDateString('tr-TR')}
-                    </p>
+      {loading ? (
+        <FriendRequestsSkeleton />
+      ) : (
+        <>
+          <div>
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">
+              Gelen İstekler ({pending.length})
+            </h3>
+            {pending.length > 0 ? (
+              <div className="space-y-3">
+                {pending.map((request) => (
+                  <div
+                    key={request._id}
+                    className="bg-white dark:bg-gray-800 rounded-2xl p-4 shadow-md"
+                  >
+                    <div className="flex items-center gap-3">
+                      <Avatar avatar={request.user?.avatar} size="sm" />
+                      <div className="flex-1">
+                        <p className="font-semibold text-gray-900 dark:text-white">
+                          {request.user?.username}
+                        </p>
+                        <p className="text-xs text-gray-500 dark:text-gray-500">
+                          {new Date(request.createdAt).toLocaleDateString('tr-TR')}
+                        </p>
+                      </div>
+                      <div className="flex gap-2">
+                        <button
+                          onClick={() => onRespond(request._id, 'accept')}
+                          className="p-2 bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400 rounded-xl hover:bg-green-200 dark:hover:bg-green-900/50 transition-colors"
+                        >
+                          <Check className="w-4 h-4" />
+                        </button>
+                        <button
+                          onClick={() => onRespond(request._id, 'reject')}
+                          className="p-2 bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 rounded-xl hover:bg-red-200 dark:hover:bg-red-900/50 transition-colors"
+                        >
+                          <X className="w-4 h-4" />
+                        </button>
+                      </div>
+                    </div>
                   </div>
-                  <div className="flex gap-2">
-                    <button
-                      onClick={() => onRespond(request._id, 'accept')}
-                      className="p-2 bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400 rounded-xl hover:bg-green-200 dark:hover:bg-green-900/50 transition-colors"
-                    >
-                      <Check className="w-4 h-4" />
-                    </button>
-                    <button
-                      onClick={() => onRespond(request._id, 'reject')}
-                      className="p-2 bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 rounded-xl hover:bg-red-200 dark:hover:bg-red-900/50 transition-colors"
-                    >
-                      <X className="w-4 h-4" />
-                    </button>
-                  </div>
-                </div>
+                ))}
               </div>
-            ))}
+            ) : (
+              <p className="text-center py-6 text-gray-500 dark:text-gray-500">Gelen istek yok</p>
+            )}
           </div>
-        ) : (
-          <p className="text-center py-6 text-gray-500 dark:text-gray-500">Gelen istek yok</p>
-        )}
-      </div>
 
-      {/* Sent Requests */}
-      <div>
-        <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">
-          Gönderilen İstekler ({sent.length})
-        </h3>
-        {sent.length > 0 ? (
-          <div className="space-y-3">
-            {sent.map((request) => (
-              <div
-                key={request._id}
-                className="bg-white dark:bg-gray-800 rounded-2xl p-4 shadow-md"
-              >
-                <div className="flex items-center gap-3">
-                  <Avatar avatar={request.user?.avatar} size="sm" />
-                  <div className="flex-1">
-                    <p className="font-semibold text-gray-900 dark:text-white">
-                      {request.user?.username}
-                    </p>
-                    <p className="text-xs text-gray-500 dark:text-gray-500">Beklemede...</p>
+          {/* Sent Requests */}
+          <div>
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">
+              Gönderilen İstekler ({sent.length})
+            </h3>
+            {sent.length > 0 ? (
+              <div className="space-y-3">
+                {sent.map((request) => (
+                  <div
+                    key={request._id}
+                    className="bg-white dark:bg-gray-800 rounded-2xl p-4 shadow-md"
+                  >
+                    <div className="flex items-center gap-3">
+                      <Avatar avatar={request.user?.avatar} size="sm" />
+                      <div className="flex-1">
+                        <p className="font-semibold text-gray-900 dark:text-white">
+                          {request.user?.username}
+                        </p>
+                        <p className="text-xs text-gray-500 dark:text-gray-500">Beklemede...</p>
+                      </div>
+                      <Clock className="w-5 h-5 text-gray-400" />
+                    </div>
                   </div>
-                  <Clock className="w-5 h-5 text-gray-400" />
-                </div>
+                ))}
               </div>
-            ))}
+            ) : (
+              <p className="text-center py-6 text-gray-500 dark:text-gray-500">
+                Gönderilen istek yok
+              </p>
+            )}
           </div>
-        ) : (
-          <p className="text-center py-6 text-gray-500 dark:text-gray-500">
-            Gönderilen istek yok
-          </p>
-        )}
-      </div>
+        </>
+      )}
     </div>
   );
 }
@@ -686,7 +686,9 @@ function SearchTab({
       </div>
 
       {/* Results */}
-      {results.length > 0 ? (
+      {loading && searchQuery ? (
+        <SearchResultsSkeleton />
+      ) : results.length > 0 ? (
         <div className="space-y-3">
           {results.map((user, index) => (
             <motion.div
