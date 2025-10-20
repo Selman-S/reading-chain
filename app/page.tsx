@@ -7,6 +7,7 @@ import Navigation from '@/components/Navigation';
 import StreakDisplay from '@/components/StreakDisplay';
 import QuickReadingEntry from '@/components/QuickReadingEntry';
 import FriendActivityFeed from '@/components/FriendActivityFeed';
+import HomePageSkeleton from '@/components/skeletons/HomePageSkeleton';
 import { TrendingUp, BookOpen, Target } from 'lucide-react';
 
 interface Stats {
@@ -70,32 +71,13 @@ export default function Home() {
   };
 
   // Loading state
-  if (status === 'loading') {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600 dark:text-gray-400">Yükleniyor...</p>
-        </div>
-      </div>
-    );
+  if (status === 'loading' || (status === 'authenticated' && loading && !stats)) {
+    return <HomePageSkeleton />;
   }
 
   // Unauthenticated - redirect to login
   if (status === 'unauthenticated') {
     return null;
-  }
-
-  // Authenticated but stats still loading
-  if (status === 'authenticated' && loading && !stats) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600 dark:text-gray-400">Veriler yükleniyor...</p>
-        </div>
-      </div>
-    );
   }
 
   return (

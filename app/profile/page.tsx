@@ -7,6 +7,7 @@ import Navigation from '@/components/Navigation';
 import Avatar from '@/components/Avatar';
 import AvatarSelector from '@/components/AvatarSelector';
 import MiniReadingChart from '@/components/MiniReadingChart';
+import ProfilePageSkeleton from '@/components/skeletons/ProfilePageSkeleton';
 import { Edit2, Save, X, BookOpen, TrendingUp, Target, Calendar } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import type { Avatar as AvatarType } from '@/lib/avatars';
@@ -101,14 +102,7 @@ function ProfileContent() {
   };
 
   if (status === 'loading' || loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-orange-600 mx-auto mb-4"></div>
-          <p className="text-gray-600 dark:text-gray-400">Profil yükleniyor...</p>
-        </div>
-      </div>
-    );
+    return <ProfilePageSkeleton />;
   }
 
   if (status === 'unauthenticated') {

@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import RegisterServiceWorker from "./register-sw";
 import { Providers } from "./providers";
+import PageTransition from "@/components/PageTransition";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -34,6 +35,7 @@ export default function RootLayout({
       <body className={inter.className}>
         <Providers>
           <RegisterServiceWorker />
+          <PageTransition />
           <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-gray-900 dark:to-gray-800">
             {children}
           </div>

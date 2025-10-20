@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import Navigation from '@/components/Navigation';
+import BooksPageSkeleton from '@/components/skeletons/BooksPageSkeleton';
 import { Plus, BookOpen, Trash2, Edit, Check, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -111,30 +112,12 @@ export default function BooksPage() {
     return Math.min((book.currentPage / book.totalPages) * 100, 100);
   };
 
-  if (status === 'loading') {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600 dark:text-gray-400">Yükleniyor...</p>
-        </div>
-      </div>
-    );
+  if (status === 'loading' || loading) {
+    return <BooksPageSkeleton />;
   }
 
   if (status === 'unauthenticated') {
     return null;
-  }
-
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600 dark:text-gray-400">Kitaplar yükleniyor...</p>
-        </div>
-      </div>
-    );
   }
 
   return (

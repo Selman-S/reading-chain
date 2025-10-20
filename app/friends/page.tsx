@@ -5,6 +5,7 @@ import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import Navigation from '@/components/Navigation';
 import Avatar from '@/components/Avatar';
+import FriendsPageSkeleton from '@/components/skeletons/FriendsPageSkeleton';
 import {
   Users,
   Search,
@@ -232,14 +233,7 @@ function FriendsContent() {
   };
 
   if (status === 'loading') {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600 dark:text-gray-400">Yükleniyor...</p>
-        </div>
-      </div>
-    );
+    return <FriendsPageSkeleton />;
   }
 
   if (status === 'unauthenticated') {

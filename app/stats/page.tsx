@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import Navigation from '@/components/Navigation';
+import StatsPageSkeleton from '@/components/skeletons/StatsPageSkeleton';
 import Heatmap from '@/components/Heatmap';
 import ReadingChart from '@/components/ReadingChart';
 import { Trophy, Book, Target, TrendingUp, Calendar, Award } from 'lucide-react';
@@ -98,15 +99,12 @@ export default function StatsPage() {
     },
   ];
 
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600 dark:text-gray-400">Yükleniyor...</p>
-        </div>
-      </div>
-    );
+  if (status === 'loading' || loading) {
+    return <StatsPageSkeleton />;
+  }
+
+  if (status === 'unauthenticated') {
+    return null;
   }
 
   return (
