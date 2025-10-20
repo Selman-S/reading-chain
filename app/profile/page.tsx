@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import Navigation from '@/components/Navigation';
 import Avatar from '@/components/Avatar';
 import AvatarSelector from '@/components/AvatarSelector';
+import MiniReadingChart from '@/components/MiniReadingChart';
 import { Edit2, Save, X, BookOpen, TrendingUp, Target, Calendar } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import type { Avatar as AvatarType } from '@/lib/avatars';
@@ -309,18 +310,35 @@ function ProfileContent() {
           </motion.div>
         </div>
 
-        {/* Badges Preview (Coming Soon) */}
+        {/* Mini Reading Chart */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.5 }}
+        >
+          <MiniReadingChart />
+        </motion.div>
+
+        {/* Badges Preview */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.6 }}
           className="bg-gradient-to-br from-yellow-50 to-orange-50 dark:from-gray-800 dark:to-gray-900 rounded-3xl p-6 shadow-xl"
         >
-          <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-4">
-            🏆 Rozetler
-          </h3>
-          <p className="text-gray-600 dark:text-gray-400 text-center py-8">
-            Rozetler yakında eklenecek! 🎉
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-xl font-bold text-gray-900 dark:text-white">
+              🏆 Rozetler
+            </h3>
+            <a
+              href="/badges"
+              className="text-sm font-medium text-orange-600 dark:text-orange-400 hover:underline"
+            >
+              Tümünü Gör →
+            </a>
+          </div>
+          <p className="text-gray-600 dark:text-gray-400 text-center py-4">
+            Rozetlerinizi toplamaya başlayın! 🎉
           </p>
         </motion.div>
       </main>

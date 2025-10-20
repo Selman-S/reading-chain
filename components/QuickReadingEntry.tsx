@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { Plus, BookOpen, Check } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import BadgeNotification from './BadgeNotification';
 
 interface Book {
   _id: string;
@@ -10,6 +11,14 @@ interface Book {
   author: string;
   currentPage: number;
   totalPages: number;
+}
+
+interface UnlockedBadge {
+  badgeId: string;
+  name: string;
+  icon: string;
+  unlockMessage: string;
+  rarity: string;
 }
 
 interface QuickReadingEntryProps {
@@ -23,6 +32,8 @@ export default function QuickReadingEntry({ onSuccess }: QuickReadingEntryProps)
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [newBadges, setNewBadges] = useState<UnlockedBadge[]>([]);
+  const [currentBadgeIndex, setCurrentBadgeIndex] = useState(0);
 
   useEffect(() => {
     fetchBooks();
@@ -71,6 +82,12 @@ export default function QuickReadingEntry({ onSuccess }: QuickReadingEntryProps)
         setShowSuccess(true);
         setPagesRead('');
         
+        // Yeni badge varsa göster
+        if (data.newBadges && data.newBadges.length > 0) {
+          setNewBadges(data.newBadges);
+          setCurrentBadgeIndex(0);
+        }
+        
         setTimeout(() => {
           setShowSuccess(false);
           onSuccess();
@@ -81,6 +98,17 @@ export default function QuickReadingEntry({ onSuccess }: QuickReadingEntryProps)
       alert('Bir hata oluştu. Lütfen tekrar deneyin.');
     } finally {
       setIsSubmitting(false);
+    }
+  };
+
+  const handleBadgeClose = () => {
+    if (currentBadgeIndex < newBadges.length - 1) {
+      // Sonraki badge'i göster
+      setCurrentBadgeIndex(currentBadgeIndex + 1);
+    } else {
+      // Hepsi gösterildi
+      setNewBadges([]);
+      setCurrentBadgeIndex(0);
     }
   };
 
@@ -118,23 +146,30 @@ export default function QuickReadingEntry({ onSuccess }: QuickReadingEntryProps)
   }
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg relative overflow-hidden">
-      <AnimatePresence>
-        {showSuccess && (
-          <motion.div
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.8 }}
-            className="absolute inset-0 bg-green-500 flex items-center justify-center z-10 rounded-2xl"
-          >
-            <div className="text-center text-white">
-              <Check className="w-16 h-16 mx-auto mb-2" />
-              <p className="text-xl font-bold">Harika! 🎉</p>
-              <p>Zinciriniz devam ediyor!</p>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+    <>
+      {/* Badge Notification */}
+      <BadgeNotification
+        badge={newBadges.length > 0 ? newBadges[currentBadgeIndex] : null}
+        onClose={handleBadgeClose}
+      />
+
+      <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg relative overflow-hidden">
+        <AnimatePresence>
+          {showSuccess && (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.8 }}
+              className="absolute inset-0 bg-green-500 flex items-center justify-center z-10 rounded-2xl"
+            >
+              <div className="text-center text-white">
+                <Check className="w-16 h-16 mx-auto mb-2" />
+                <p className="text-xl font-bold">Harika! 🎉</p>
+                <p>Zinciriniz devam ediyor!</p>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
       <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-4">
         Bugün Kaç Sayfa Okudun?
@@ -182,7 +217,8 @@ export default function QuickReadingEntry({ onSuccess }: QuickReadingEntryProps)
           {isSubmitting ? 'Kaydediliyor...' : 'Kaydet 🔥'}
         </button>
       </form>
-    </div>
+      </div>
+    </>
   );
 }
 

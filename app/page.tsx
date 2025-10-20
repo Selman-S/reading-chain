@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import Navigation from '@/components/Navigation';
 import StreakDisplay from '@/components/StreakDisplay';
 import QuickReadingEntry from '@/components/QuickReadingEntry';
+import FriendActivityFeed from '@/components/FriendActivityFeed';
 import { TrendingUp, BookOpen, Target } from 'lucide-react';
 
 interface Stats {
@@ -173,6 +174,11 @@ export default function Home() {
             </p>
           </div>
         )}
+
+        {/* Friend Activity Feed */}
+        <div className="mt-6 animate-fadeIn">
+          <FriendActivityFeed />
+        </div>
       </main>
 
       <Navigation />

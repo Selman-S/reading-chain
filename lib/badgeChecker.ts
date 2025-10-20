@@ -2,6 +2,7 @@ import { BADGE_DEFINITIONS, BadgeCategory } from './badges';
 import User from '@/models/User';
 import UserBadge from '@/models/UserBadge';
 import Reading from '@/models/Reading';
+import Friend, { FriendStatus } from '@/models/Friend';
 
 interface UnlockedBadge {
   badgeId: string;
@@ -203,6 +204,73 @@ async function checkSpecialBadge(userId: string, badgeId: string): Promise<boole
       }
 
       return weekendCount >= 10;
+    }
+
+    // MILESTONE BADGES
+    if (badgeId === 'first_friend') {
+      // İlk arkadaşını ekle
+      const friendCount = await Friend.countDocuments({
+        $or: [
+          { userId, status: FriendStatus.ACCEPTED },
+          { friendId: userId, status: FriendStatus.ACCEPTED },
+        ],
+      });
+      return friendCount >= 1;
+    }
+
+    if (badgeId === 'social_butterfly') {
+      // 10 arkadaş
+      const friendCount = await Friend.countDocuments({
+        $or: [
+          { userId, status: FriendStatus.ACCEPTED },
+          { friendId: userId, status: FriendStatus.ACCEPTED },
+        ],
+      });
+      return friendCount >= 10;
+    }
+
+    if (badgeId === 'year_veteran') {
+      // Bir yıldır uygulamayı kullan
+      const user = await User.findById(userId);
+      if (!user || !user.createdAt) return false;
+
+      const oneYearAgo = new Date();
+      oneYearAgo.setFullYear(oneYearAgo.getFullYear() - 1);
+      return new Date(user.createdAt) <= oneYearAgo;
+    }
+
+    if (badgeId === 'consistent_reader') {
+      // 30 gün boyunca her gün en az 10 sayfa oku
+      const thirtyDaysAgo = new Date();
+      thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+
+      const readings = await Reading.find({
+        userId,
+        date: { $gte: thirtyDaysAgo },
+      }).sort({ date: 1 });
+
+      // Her günü kontrol et
+      const dailyPages: Record<string, number> = {};
+      readings.forEach(r => {
+        const dateStr = new Date(r.date).toISOString().split('T')[0];
+        if (!dailyPages[dateStr]) dailyPages[dateStr] = 0;
+        dailyPages[dateStr] += r.pagesRead;
+      });
+
+      // 30 gün boyunca her gün en az 10 sayfa var mı?
+      let consecutiveDays = 0;
+      for (let i = 0; i < 30; i++) {
+        const date = new Date();
+        date.setDate(date.getDate() - i);
+        const dateStr = date.toISOString().split('T')[0];
+        if (dailyPages[dateStr] && dailyPages[dateStr] >= 10) {
+          consecutiveDays++;
+        } else {
+          break;
+        }
+      }
+
+      return consecutiveDays >= 30;
     }
 
     return false;

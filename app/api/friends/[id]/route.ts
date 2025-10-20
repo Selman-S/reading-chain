@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/auth';
 import dbConnect from '@/lib/mongodb';
 import Friend, { FriendStatus } from '@/models/Friend';
+import { checkAndUnlockBadges } from '@/lib/badgeChecker';
 
 // PUT - İsteği kabul et veya reddet
 export async function PUT(
@@ -60,10 +61,15 @@ export async function PUT(
       friendRequest.status = FriendStatus.ACCEPTED;
       await friendRequest.save();
 
+      // Badge kontrolü (her iki taraf için)
+      const newBadges1 = await checkAndUnlockBadges(session.user.id);
+      const newBadges2 = await checkAndUnlockBadges(friendRequest.userId);
+
       return NextResponse.json({
         success: true,
         data: friendRequest,
         message: 'Arkadaşlık isteği kabul edildi',
+        newBadges: newBadges1.length > 0 ? newBadges1 : undefined,
       });
     } else {
       friendRequest.status = FriendStatus.REJECTED;
