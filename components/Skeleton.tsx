@@ -1,5 +1,3 @@
-import { motion } from 'framer-motion';
-
 interface SkeletonProps {
   className?: string;
   variant?: 'text' | 'circular' | 'rectangular' | 'rounded';
@@ -24,24 +22,10 @@ export function Skeleton({
     rounded: 'rounded-xl',
   };
 
-  const animationVariants = {
-    pulse: {
-      opacity: [0.5, 1, 0.5],
-      transition: {
-        duration: 1.5,
-        repeat: Infinity,
-        ease: 'easeInOut',
-      },
-    },
-    wave: {
-      backgroundPosition: ['200% 0', '-200% 0'],
-      transition: {
-        duration: 2,
-        repeat: Infinity,
-        ease: 'linear',
-      },
-    },
-    none: {},
+  const animationClasses = {
+    pulse: 'animate-pulse',
+    wave: 'animate-shimmer bg-[length:200%_100%]',
+    none: '',
   };
 
   const style: React.CSSProperties = {
@@ -49,23 +33,10 @@ export function Skeleton({
     height: height || undefined,
   };
 
-  if (animation === 'wave') {
-    return (
-      <div
-        className={`${baseClasses} ${variantClasses[variant]} ${className} bg-[length:200%_100%]`}
-        style={{
-          ...style,
-          animation: 'shimmer 2s infinite linear',
-        }}
-      />
-    );
-  }
-
   return (
-    <motion.div
-      className={`${baseClasses} ${variantClasses[variant]} ${className}`}
+    <div
+      className={`${baseClasses} ${variantClasses[variant]} ${animationClasses[animation]} ${className}`}
       style={style}
-      animate={animation !== 'none' ? animationVariants[animation] : undefined}
     />
   );
 }
