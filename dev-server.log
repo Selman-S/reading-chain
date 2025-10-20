@@ -85,3 +85,5 @@
  GET /api/profile 200 in 162ms
  GET /api/profile 200 in 154ms
  GET /api/profile 200 in 154ms
+ ✓ Compiled in 1099ms (2827 modules)
+ GET /profile 200 in 135ms

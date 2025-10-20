@@ -3,6 +3,8 @@ import { auth } from '@/auth';
 import dbConnect from '@/lib/mongodb';
 import Reading from '@/models/Reading';
 import Book from '@/models/Book';
+import { updateUserStats } from '@/lib/statsUpdater';
+import { checkAndUnlockBadges } from '@/lib/badgeChecker';
 
 // GET - Okuma kayıtlarını getir (user bazlı)
 export async function GET(request: NextRequest) {
@@ -99,8 +101,19 @@ export async function POST(request: NextRequest) {
     
     await book.save();
     
+    // Stats güncelle
+    await updateUserStats(session.user.id);
+    
+    // Badge kontrolü yap
+    const newBadges = await checkAndUnlockBadges(session.user.id);
+    
     return NextResponse.json(
-      { success: true, data: reading, book },
+      { 
+        success: true, 
+        data: reading, 
+        book,
+        newBadges: newBadges.length > 0 ? newBadges : undefined,
+      },
       { status: 201 }
     );
   } catch (error: any) {
