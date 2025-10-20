@@ -1,22 +1,26 @@
-// Avatar seçenekleri - Emoji based
+// Avatar options - Cute animals
 export const AVATARS = [
-  '😊', // Happy
-  '🤓', // Nerdy
-  '😎', // Cool
-  '🥳', // Party
-  '🤩', // Star-struck
-  '🥰', // Love
   '🐶', // Dog
   '🐱', // Cat
-  '🦊', // Fox
   '🐼', // Panda
-  '🦁', // Lion
+  '🦊', // Fox
   '🐨', // Koala
+  '🐰', // Rabbit
+  '🐹', // Hamster
+  '🦁', // Lion
+  '🐯', // Tiger
+  '🐻', // Bear
+  '🐸', // Frog
+  '🦉', // Owl
+  '🐧', // Penguin
+  '🐥', // Chick
+  '🦄', // Unicorn
+  '🐺', // Wolf
 ] as const;
 
 export type Avatar = typeof AVATARS[number];
 
-export const DEFAULT_AVATAR: Avatar = '😊';
+export const DEFAULT_AVATAR: Avatar = '🐶';
 
 // Avatar display için helper
 export const getAvatarEmoji = (avatar?: string): string => {

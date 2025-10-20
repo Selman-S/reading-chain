@@ -3,12 +3,13 @@
 import { useEffect, useState, Suspense } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import Navigation from '@/components/Navigation';
 import StreakDisplay from '@/components/StreakDisplay';
 import QuickReadingEntry from '@/components/QuickReadingEntry';
 import FriendActivityFeed from '@/components/FriendActivityFeed';
 import HomePageSkeleton from '@/components/skeletons/HomePageSkeleton';
-import { TrendingUp, BookOpen, Target } from 'lucide-react';
+import { TrendingUp, BookOpen, Target, Trophy, ChevronRight } from 'lucide-react';
 
 interface Stats {
   streak: {
@@ -28,12 +29,14 @@ export default function Home() {
   const [stats, setStats] = useState<Stats | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [badgeCount, setBadgeCount] = useState(0);
 
   useEffect(() => {
     if (status === 'unauthenticated') {
       router.push('/login');
     } else if (status === 'authenticated') {
       fetchStats();
+      fetchBadgeCount();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [status]);
@@ -63,6 +66,22 @@ export default function Home() {
       });
     } finally {
       setLoading(false);
+    }
+  };
+
+  const fetchBadgeCount = async () => {
+    try {
+      const res = await fetch('/api/badges');
+      if (res.ok) {
+        const data = await res.json();
+        if (data.success && data.data) {
+          // Count unlocked badges
+          const unlockedCount = data.data.filter((b: any) => b.unlockedAt).length;
+          setBadgeCount(unlockedCount);
+        }
+      }
+    } catch (error) {
+      console.error('Rozet sayısı alınamadı:', error);
     }
   };
 
@@ -139,6 +158,27 @@ export default function Home() {
         <div className="animate-fadeIn">
           <QuickReadingEntry onSuccess={handleReadingAdded} />
         </div>
+
+        {/* Quick Access: Badges */}
+        <Link 
+          href="/badges"
+          className="mt-6 bg-gradient-to-br from-yellow-50 to-orange-50 dark:from-yellow-900/20 dark:to-orange-900/20 border-2 border-yellow-200 dark:border-yellow-800 rounded-2xl p-4 flex items-center justify-between hover:scale-[1.02] transition-transform cursor-pointer animate-fadeIn"
+        >
+          <div className="flex items-center gap-4">
+            <div className="bg-yellow-100 dark:bg-yellow-900 rounded-full w-12 h-12 flex items-center justify-center">
+              <Trophy className="w-6 h-6 text-yellow-600 dark:text-yellow-400" />
+            </div>
+            <div>
+              <p className="font-bold text-gray-900 dark:text-white">
+                Rozetlerim
+              </p>
+              <p className="text-sm text-gray-600 dark:text-gray-400">
+                {badgeCount} rozet kazandın 🏆
+              </p>
+            </div>
+          </div>
+          <ChevronRight className="w-6 h-6 text-gray-400 dark:text-gray-500" />
+        </Link>
 
         {/* Motivational Message */}
         {stats && stats.streak.current === 0 && (

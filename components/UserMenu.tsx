@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { signOut, useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-import { LogOut, User as UserIcon, Settings as SettingsIcon } from 'lucide-react';
+import { LogOut, User as UserIcon, Settings as SettingsIcon, Trophy } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Avatar from './Avatar';
 
@@ -89,6 +89,13 @@ export default function UserMenu() {
                 >
                   <UserIcon className="w-5 h-5" />
                   <span className="font-medium">Profilim</span>
+                </button>
+                <button
+                  onClick={() => handleMenuClick('/badges')}
+                  className="w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors text-gray-900 dark:text-white"
+                >
+                  <Trophy className="w-5 h-5 text-yellow-600 dark:text-yellow-400" />
+                  <span className="font-medium">Rozetlerim</span>
                 </button>
                 <button
                   onClick={() => handleMenuClick('/settings')}

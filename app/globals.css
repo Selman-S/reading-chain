@@ -1,9 +1,7 @@
 @import "tailwindcss";
 
-/* Configure dark mode to use class strategy */
-@theme {
-  --dark-mode: class;
-}
+/* Tailwind v4 dark mode configuration */
+@custom-variant dark (&:is(.dark, .dark *));
 
 :root {
   --background: #ffffff;

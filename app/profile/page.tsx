@@ -3,12 +3,13 @@
 import { useEffect, useState, Suspense } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import Navigation from '@/components/Navigation';
 import Avatar from '@/components/Avatar';
 import AvatarSelector from '@/components/AvatarSelector';
 import MiniReadingChart from '@/components/MiniReadingChart';
 import ProfilePageSkeleton from '@/components/skeletons/ProfilePageSkeleton';
-import { Edit2, Save, X, BookOpen, TrendingUp, Target, Calendar } from 'lucide-react';
+import { Edit2, Save, X, BookOpen, TrendingUp, Target, Calendar, Trophy } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import type { Avatar as AvatarType } from '@/lib/avatars';
 
@@ -33,6 +34,8 @@ function ProfileContent() {
   const [loading, setLoading] = useState(true);
   const [editMode, setEditMode] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [recentBadges, setRecentBadges] = useState<any[]>([]);
+  const [badgeCount, setBadgeCount] = useState(0);
   
   // Edit form data
   const [editData, setEditData] = useState({
@@ -45,6 +48,7 @@ function ProfileContent() {
       router.push('/login');
     } else if (status === 'authenticated') {
       fetchProfile();
+      fetchBadges();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [status]);
@@ -64,6 +68,27 @@ function ProfileContent() {
       console.error('Profile fetch error:', error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const fetchBadges = async () => {
+    try {
+      const res = await fetch('/api/badges');
+      if (res.ok) {
+        const data = await res.json();
+        if (data.success && data.data) {
+          // Filter and get unlocked badges
+          const unlocked = data.data.filter((b: any) => b.unlockedAt);
+          setBadgeCount(unlocked.length);
+          // Get most recent 3 badges
+          const recent = unlocked
+            .sort((a: any, b: any) => new Date(b.unlockedAt).getTime() - new Date(a.unlockedAt).getTime())
+            .slice(0, 3);
+          setRecentBadges(recent);
+        }
+      }
+    } catch (error) {
+      console.error('Rozet bilgisi alınamadı:', error);
     }
   };
 
@@ -318,22 +343,47 @@ function ProfileContent() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.6 }}
-          className="bg-gradient-to-br from-yellow-50 to-orange-50 dark:from-gray-800 dark:to-gray-900 rounded-3xl p-6 shadow-xl"
+          className="bg-gradient-to-br from-yellow-50 to-orange-50 dark:from-yellow-900/20 dark:to-orange-900/20 border-2 border-yellow-200 dark:border-yellow-800 rounded-2xl p-6 shadow-lg mt-6"
         >
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-xl font-bold text-gray-900 dark:text-white">
-              🏆 Rozetler
-            </h3>
-            <a
+            <div className="flex items-center gap-2">
+              <Trophy className="w-6 h-6 text-yellow-600 dark:text-yellow-400" />
+              <h3 className="text-xl font-bold text-gray-900 dark:text-white">
+                Rozetlerim
+              </h3>
+            </div>
+            <Link
               href="/badges"
-              className="text-sm font-medium text-orange-600 dark:text-orange-400 hover:underline"
+              className="text-sm font-medium text-orange-600 dark:text-orange-400 hover:underline flex items-center gap-1"
             >
               Tümünü Gör →
-            </a>
+            </Link>
           </div>
-          <p className="text-gray-600 dark:text-gray-400 text-center py-4">
-            Rozetlerinizi toplamaya başlayın! 🎉
-          </p>
+          
+          {recentBadges.length > 0 ? (
+            <div>
+              <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">
+                {badgeCount} rozet kazandın! Son kazandıklarından bazıları:
+              </p>
+              <div className="grid grid-cols-3 gap-3">
+                {recentBadges.map((badge: any) => (
+                  <div
+                    key={badge.badgeId}
+                    className="bg-white dark:bg-gray-800 rounded-xl p-3 text-center shadow-sm"
+                  >
+                    <div className="text-3xl mb-1">{badge.icon}</div>
+                    <p className="text-xs font-medium text-gray-900 dark:text-white truncate">
+                      {badge.name}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ) : (
+            <p className="text-gray-600 dark:text-gray-400 text-center py-4">
+              Rozetlerinizi toplamaya başlayın! 🎉
+            </p>
+          )}
         </motion.div>
       </main>
 
