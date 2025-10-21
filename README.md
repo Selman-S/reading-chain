@@ -78,6 +78,27 @@ npm run dev
 
 Tarayıcınızda [http://localhost:3000](http://localhost:3000) adresini açın.
 
+### 5. Test Verilerini Yükleyin (Opsiyonel)
+
+Uygulamayı test etmek için örnek kullanıcılar ve veriler oluşturmak isterseniz:
+
+```bash
+npm run seed
+```
+
+Bu komut 3 test kullanıcısı oluşturacak:
+- **selman** (selman@test.com) - Şifre: 123456
+- **ahmet** (ahmet@test.com) - Şifre: 123456
+- **ayse** (ayse@test.com) - Şifre: 123456
+
+Her kullanıcı için:
+- ✅ 3 kitap (bazıları tamamlanmış, bazıları aktif)
+- ✅ Geçmiş tarihli okuma kayıtları
+- ✅ 7 günlük aktif streak
+- ✅ Birbirleriyle arkadaşlık
+
+Detaylı bilgi için: **[scripts/README.md](./scripts/README.md)**
+
 ## 🚀 Deployment
 
 ### Vercel (Önerilen)
