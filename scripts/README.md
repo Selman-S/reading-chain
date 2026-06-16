@@ -68,8 +68,11 @@ Bu sayede script'i istediğiniz kadar çalıştırabilirsiniz.
 ## 🧪 Test Senaryoları
 
 ### Giriş Yapma
+
+> Giriş **e-posta ile değil**, **kullanıcı adı** ile yapılır.
+
 ```
-Email: selman@test.com
+Kullanıcı adı: selman
 Şifre: 123456
 ```
 

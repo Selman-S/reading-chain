@@ -30,11 +30,13 @@
     
     Proje kök dizininde .env.local dosyası oluşturun:
     
-    # Yerel MongoDB için:
+    # MongoDB
     MONGODB_URI=mongodb://localhost:27017/reading-chain
-    
-    # MongoDB Atlas için:
-    MONGODB_URI=mongodb+srv://KULLANICI:ŞİFRE@cluster0.xxxxx.mongodb.net/reading-chain
+    # MONGODB_URI=mongodb+srv://KULLANICI:ŞİFRE@cluster0.xxxxx.mongodb.net/reading-chain
+
+    # NextAuth (Gerekli!)
+    AUTH_SECRET=your-secret-here
+    NEXTAUTH_URL=http://localhost:3000
 
 3️⃣  Uygulamayı Başlatın
     
@@ -43,17 +45,29 @@
     
     ✨ Tarayıcıda açın: http://localhost:3000
 
+4️⃣  Test Verisi Yükle (Opsiyonel)
+    
+    npm run seed
+    
+    Giriş: kullanıcı adı selman, şifre 123456
+
 ═══════════════════════════════════════════════════════════════
 📱 KULLANIM
 ═══════════════════════════════════════════════════════════════
 
-1. Kitap Ekle → "Kitaplarım" sekmesinden "+" butonuna tıklayın
-2. Okuma Kaydı → Ana sayfadan günlük okuduğunuz sayfayı girin
-3. Streak → Her gün okuyarak zincirinizi uzatın!
+1. Kayıt/Giriş → /signup veya /login (kullanıcı adı + şifre)
+2. Kitap Ekle → "Kitaplarım" sekmesinden "+" butonuna tıklayın
+3. Okuma Kaydı → Ana sayfadan günlük okuduğunuz sayfayı girin
+4. Streak → Her gün okuyarak zincirinizi uzatın!
 
 ═══════════════════════════════════════════════════════════════
 ✨ ÖZELLİKLER (50+ Özellik!)
 ═══════════════════════════════════════════════════════════════
+
+🔐 KİMLİK DOĞRULAMA:
+  ✅ Kayıt ol / Giriş yap (kullanıcı adı + şifre)
+  ✅ Multi-user veri izolasyonu
+  ✅ NextAuth.js v5 JWT session
 
 📚 TEMEL:
   ✅ Kitap yönetimi (ekle/düzenle/sil)
@@ -62,12 +76,17 @@
   ✅ İlerleme takibi
   ✅ Mobil-öncelikli tasarım
 
+🤝 SOSYAL:
+  ✅ Arkadaş ekleme ve aktivite akışı
+  ✅ Leaderboard (sıralama)
+  ✅ Profil sayfası
+
 📊 İSTATİSTİKLER:
   ✅ Toplam okunan sayfa
   ✅ Günlük ortalama
   ✅ Son 30 gün grafiği (çizgi/çubuk)
   ✅ Aylık ısı haritası (GitHub tarzı)
-  ✅ 6 farklı başarım rozeti
+  ✅ Başarım rozetleri
 
 🔔 BİLDİRİMLER:
   ✅ Günlük hatırlatıcılar
@@ -87,10 +106,10 @@
 
 🔧 TEKNİK:
   ✅ Next.js 15
-  ✅ React 18
+  ✅ React 19
   ✅ TypeScript
   ✅ MongoDB + Mongoose
-  ✅ TailwindCSS
+  ✅ TailwindCSS v4
   ✅ Framer Motion
   ✅ Chart.js
 
@@ -101,7 +120,9 @@
 📖 README.md          → Genel bilgiler
 🚀 QUICKSTART.md      → Hızlı başlangıç (3 adım!)
 🛠  SETUP.md           → Detaylı kurulum rehberi
+🔐 AUTH_SETUP_TR.md   → Kimlik doğrulama kurulumu
 ✨ FEATURES.md        → Tüm özellikler listesi
+🌱 scripts/README.md  → Test verisi seed rehberi
 🎨 ICONS_GUIDE.md     → İkon değiştirme rehberi
 
 ═══════════════════════════════════════════════════════════════
@@ -111,52 +132,46 @@
 reading-chain/
 ├── 📁 app/
 │   ├── 🌐 api/              → Backend API
+│   │   ├── auth/           → Giriş/kayıt
 │   │   ├── books/          → Kitap API
 │   │   ├── readings/       → Okuma kayıtları API
-│   │   └── stats/          → İstatistikler API
+│   │   ├── stats/          → İstatistikler API
+│   │   ├── friends/        → Arkadaşlık API
+│   │   └── badges/         → Rozetler API
 │   ├── 📚 books/            → Kitaplar sayfası
+│   ├── 👥 friends/          → Arkadaşlar sayfası
 │   ├── 📊 stats/            → İstatistikler sayfası
 │   ├── ⚙️  settings/        → Ayarlar sayfası
+│   ├── 🔐 login/             → Giriş sayfası
+│   ├── 📝 signup/            → Kayıt sayfası
 │   └── 🏠 page.tsx          → Ana sayfa (Dashboard)
 ├── 🧩 components/          → UI bileşenleri
-│   ├── Navigation.tsx      → Alt navigasyon
-│   ├── StreakDisplay.tsx   → Zincir göstergesi
-│   ├── QuickReadingEntry   → Hızlı kayıt formu
-│   ├── Heatmap.tsx         → Isı haritası
-│   └── ReadingChart.tsx    → Grafikler
 ├── 🗄️  models/              → MongoDB şemaları
-│   ├── Book.ts             → Kitap modeli
-│   └── Reading.ts          → Okuma kaydı modeli
-├── 🔧 lib/                 → Utility'ler
-│   └── mongodb.ts          → DB bağlantısı
+├── 🌱 scripts/             → Seed script
 └── 🌐 public/              → Statik dosyalar
-    ├── manifest.json       → PWA manifest
-    ├── sw.js               → Service Worker
-    └── *.png               → İkonlar
 
 ═══════════════════════════════════════════════════════════════
 🎯 SONRAKI ADIMLAR
 ═══════════════════════════════════════════════════════════════
 
 1. ✅ MongoDB'yi kurun/yapılandırın
-2. ✅ .env.local dosyası oluşturun
+2. ✅ .env.local dosyası oluşturun (MONGODB_URI + AUTH_SECRET)
 3. ✅ npm install && npm run dev
-4. ✅ http://localhost:3000 adresini açın
-5. ✅ İlk kitabınızı ekleyin
-6. ✅ Okuma kaydı yapın
-7. ✅ Ayarlardan bildirimleri açın
+4. ✅ npm run seed (opsiyonel) veya /signup ile kayıt olun
+5. ✅ http://localhost:3000/login ile giriş yapın
+6. ✅ İlk kitabınızı ekleyin
+7. ✅ Okuma kaydı yapın
 8. ✅ Her gün okuyun! 🔥
 
 ═══════════════════════════════════════════════════════════════
 💡 İPUÇLARI
 ═══════════════════════════════════════════════════════════════
 
+• Giriş kullanıcı adı ile yapılır (e-posta değil!)
+• npm run seed ile hazır test hesapları oluşturabilirsiniz
 • Bildirimleri açarak günlük hatırlatıcı alın
 • Karanlık modu aktif edin (gece okumalar için)
-• Günlük hedef belirleyin (ayarlardan)
-• Düzenli olarak istatistiklerinizi kontrol edin
 • Mobil cihazınıza PWA olarak yükleyin
-• Verilerinizi düzenli olarak dışa aktarın
 
 ═══════════════════════════════════════════════════════════════
 🐛 SORUN GİDERME
@@ -167,13 +182,12 @@ MongoDB bağlanamıyor?
 → .env.local dosyası doğru konumda mı?
 → MONGODB_URI doğru mu?
 
+Giriş yapılamıyor?
+→ Kullanıcı adı ile giriş yapın (e-posta değil)
+→ AUTH_SECRET tanımlı mı?
+
 Port 3000 kullanımda?
 → npm run dev -- -p 3001
-
-Build hatası?
-→ rm -rf .next node_modules
-→ npm install
-→ npm run build
 
 ═══════════════════════════════════════════════════════════════
 🚀 DEPLOYMENT (İSTEĞE BAĞLI)
@@ -183,19 +197,10 @@ Vercel'e Deploy:
 1. GitHub'da repo oluşturun
 2. Kodu push edin
 3. Vercel.com → Import Project
-4. Environment Variables → MONGODB_URI ekleyin
+4. Environment Variables → MONGODB_URI, AUTH_SECRET, NEXTAUTH_URL
 5. Deploy!
 
-═══════════════════════════════════════════════════════════════
-📊 BUILD İSTATİSTİKLERİ
-═══════════════════════════════════════════════════════════════
-
-✅ Build başarılı (0 hata, 0 uyarı)
-📦 Ana sayfa: 148 kB
-📦 Kitaplar: 147 kB
-📦 İstatistikler: 187 kB
-⚡ Derleme süresi: ~5 saniye
-🎯 Production ready!
+Detaylar: VERCEL_DEPLOYMENT.md
 
 ═══════════════════════════════════════════════════════════════
 🎉 TEBRIKLER!
@@ -211,4 +216,3 @@ Reading Chain uygulamanız kullanıma hazır!
 İyi okumalar! ✨
 
 ═══════════════════════════════════════════════════════════════
-

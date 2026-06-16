@@ -49,56 +49,11 @@ Environment: Development
 
 ⚠️ **Production URL'yi projeniz deploy olduktan sonra ekleyin!**
 
-#### GOOGLE_CLIENT_ID
-```
-Name: GOOGLE_CLIENT_ID
-Value: your-google-client-id.apps.googleusercontent.com
-Environment: Production, Preview, Development
-```
-
-#### GOOGLE_CLIENT_SECRET
-```
-Name: GOOGLE_CLIENT_SECRET
-Value: GOCSPX-your-google-client-secret
-Environment: Production, Preview, Development
-```
-
 ### 3. Save ve Redeploy
 
 1. Tüm variables'ı ekledikten sonra **"Save"**
 2. **Deployments** sekmesine gidin
 3. Son deployment'ın yanındaki **"..."** → **"Redeploy"**
-
----
-
-## Google OAuth Production Setup
-
-### 1. Google Cloud Console'da Production URL Ekleyin
-
-1. [Google Cloud Console](https://console.cloud.google.com/)
-2. **APIs & Services** → **Credentials**
-3. OAuth 2.0 Client ID'nizi seçin
-4. **Authorized JavaScript origins** ekleyin:
-   ```
-   https://your-app-name.vercel.app
-   ```
-5. **Authorized redirect URIs** ekleyin:
-   ```
-   https://your-app-name.vercel.app/api/auth/callback/google
-   ```
-6. **Save**
-
-### 2. NEXTAUTH_URL Güncelleme
-
-Vercel Dashboard → Settings → Environment Variables:
-
-```
-Name: NEXTAUTH_URL
-Value: https://your-app-name.vercel.app
-Environment: Production
-```
-
-**Save** ve **Redeploy**
 
 ---
 
@@ -149,18 +104,12 @@ Environment: Production
 - [ ] MONGODB_URI eklendi
 - [ ] AUTH_SECRET eklendi
 - [ ] NEXTAUTH_URL eklendi (production URL ile)
-- [ ] GOOGLE_CLIENT_ID eklendi
-- [ ] GOOGLE_CLIENT_SECRET eklendi
 
 ### MongoDB Atlas'ta:
 - [ ] FREE M0 cluster oluşturuldu
 - [ ] Database user oluşturuldu
 - [ ] Network access 0.0.0.0/0 eklendi
 - [ ] Connection string alındı
-
-### Google Cloud Console'da:
-- [ ] Production URL authorized origins'e eklendi
-- [ ] Production callback URL redirect URIs'e eklendi
 
 ### Son Kontrol:
 - [ ] Tüm environment variables kaydedildi
@@ -180,17 +129,13 @@ Environment: Production
 3. **Save**
 4. Deployments → **Redeploy**
 
-### "redirect_uri_mismatch"
+### Giriş yapılamıyor / "Unauthorized"
 
 **Çözüm:**
-1. Google Cloud Console → Credentials
-2. Authorized redirect URIs kontrol edin:
-   ```
-   https://your-actual-url.vercel.app/api/auth/callback/google
-   ```
-3. URL'nin tam olarak eşleştiğinden emin olun
-4. **Save**
-5. 5-10 dakika bekleyin (Google cache'i)
+1. `AUTH_SECRET` Vercel'de tanımlı mı kontrol edin
+2. `NEXTAUTH_URL` production URL ile eşleşiyor mu?
+3. Kullanıcı adı ile giriş yapın (e-posta değil)
+4. Redeploy yapın
 
 ### MongoDB Connection Error
 
@@ -215,7 +160,7 @@ Deploy sonrası test edin:
 
 1. ✅ Ana sayfa yükleniyor mu?
 2. ✅ Login sayfası açılıyor mu?
-3. ✅ Google ile giriş yapabiliyor musunuz?
+3. ✅ Kayıt olup giriş yapabiliyor musunuz?
 4. ✅ Giriş sonrası ana sayfaya yönleniyor mu?
 5. ✅ Kitap ekleyebiliyor musunuz?
 6. ✅ Okuma kaydı ekleyebiliyor musunuz?
@@ -231,10 +176,6 @@ MONGODB_URI=mongodb+srv://readingchain:PASSWORD@cluster0.xxxxx.mongodb.net/readi
 # NextAuth
 AUTH_SECRET=your-32-char-random-string
 NEXTAUTH_URL=https://your-app.vercel.app
-
-# Google OAuth
-GOOGLE_CLIENT_ID=123456-abcdef.apps.googleusercontent.com
-GOOGLE_CLIENT_SECRET=GOCSPX-your-secret
 ```
 
 ---
@@ -244,7 +185,6 @@ GOOGLE_CLIENT_SECRET=GOCSPX-your-secret
 ✅ **Yapılması Gerekenler:**
 - AUTH_SECRET güçlü ve rastgele olmalı
 - MongoDB şifresi güçlü olmalı
-- Google OAuth credentials gizli tutulmalı
 - Production'da HTTPS kullanılmalı (Vercel otomatik)
 
 ❌ **Yapılmaması Gerekenler:**

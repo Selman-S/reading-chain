@@ -40,28 +40,43 @@
 
 ### 🚀 Gelişmiş Özellikler
 
-#### 5. Bildirim Sistemi
+#### 5. Kimlik Doğrulama
+- ✅ Kullanıcı kaydı (`/signup`)
+- ✅ Kullanıcı adı/şifre ile giriş (`/login`)
+- ✅ bcryptjs şifre hash'leme
+- ✅ NextAuth.js v5 JWT session
+- ✅ Route koruması (middleware)
+- ✅ Multi-user veri izolasyonu
+
+#### 6. Sosyal Özellikler
+- ✅ Arkadaş ekleme ve istek yönetimi
+- ✅ Arkadaş aktivite akışı
+- ✅ Leaderboard (sıralama tablosu)
+- ✅ Kullanıcı arama
+- ✅ Profil sayfası (avatar, bio)
+
+#### 7. Bildirim Sistemi
 - ✅ Tarayıcı push bildirimleri
 - ✅ Günlük hatırlatıcılar
 - ✅ Özelleştirilebilir bildirim saati
 - ✅ Bildirim izni yönetimi
 - ✅ Test bildirimi gönderme
 
-#### 6. Karanlık Mod
+#### 8. Karanlık Mod
 - ✅ Açık/Koyu tema
 - ✅ LocalStorage'da tercih saklama
 - ✅ Sistem teması algılama
 - ✅ Tüm sayfalarda tutarlı tema
 - ✅ Smooth geçişler
 
-#### 7. Ayarlar
+#### 9. Ayarlar
 - ✅ Tema değiştirme
 - ✅ Bildirim ayarları
 - ✅ Günlük sayfa hedefi belirleme
 - ✅ Veri dışa aktarma (JSON)
 - ✅ Tüm verileri silme
 
-#### 8. PWA (Progressive Web App)
+#### 10. PWA (Progressive Web App)
 - ✅ Manifest.json yapılandırması
 - ✅ Service Worker
 - ✅ Offline önbellekleme
@@ -71,14 +86,14 @@
 
 ### 🎨 Tasarım ve UX
 
-#### 9. Mobil-Öncelikli Tasarım
+#### 11. Mobil-Öncelikli Tasarım
 - ✅ Responsive layout (tüm cihazlar)
 - ✅ Touch-friendly butonlar
 - ✅ Mobil navigasyon (alt bar)
 - ✅ Kolay dokunulabilir UI elemanları
 - ✅ Hızlı yükleme süreleri
 
-#### 10. Animasyonlar ve Geçişler
+#### 12. Animasyonlar ve Geçişler
 - ✅ Framer Motion ile smooth animasyonlar
 - ✅ Sayfa geçiş animasyonları
 - ✅ Başarı bildirimleri
@@ -86,7 +101,7 @@
 - ✅ Hover efektleri
 - ✅ Pulse glow efektleri
 
-#### 11. Modern UI Bileşenleri
+#### 13. Modern UI Bileşenleri
 - ✅ Gradient butonlar
 - ✅ Card'lar (yuvarlak köşeli)
 - ✅ Modal'lar
@@ -97,7 +112,7 @@
 
 ### 🔧 Teknik Özellikler
 
-#### 12. Backend
+#### 14. Backend
 - ✅ Next.js API Routes
 - ✅ MongoDB + Mongoose
 - ✅ RESTful API
@@ -105,7 +120,7 @@
 - ✅ Otomatik timestamping
 - ✅ Database indexing
 
-#### 13. Veri Yönetimi
+#### 15. Veri Yönetimi
 - ✅ CRUD işlemleri (kitaplar)
 - ✅ İlişkisel veriler (readings -> books)
 - ✅ Aggregate queries
@@ -154,6 +169,16 @@
 - `GET /api/stats?period=month` - Aylık
 - `GET /api/stats?period=year` - Yıllık
 
+#### Kimlik Doğrulama:
+- `POST /api/auth/signup` - Kayıt
+- `POST /api/auth/callback/credentials` - Giriş
+
+#### Sosyal & Profil:
+- `GET /api/profile` - Profil
+- `GET /api/friends` - Arkadaşlar
+- `GET /api/leaderboard` - Sıralama
+- `GET /api/badges` - Rozetler
+
 ## 🚀 Ekstra Özellikler (Bonus)
 
 - ✅ TypeScript (tip güvenliği)
@@ -181,7 +206,9 @@
 - ✅ Input validation
 - ✅ MongoDB injection koruması
 - ✅ XSS koruması
-- ✅ CORS yapılandırması (hazır)
+- ✅ bcryptjs şifre hash'leme
+- ✅ JWT session yönetimi
+- ✅ Route middleware koruması
 
 ## 📱 Tarayıcı Desteği
 

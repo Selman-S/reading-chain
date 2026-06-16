@@ -95,6 +95,20 @@ Günlük kitap okuma alışkanlığını takip etmek için geliştirilmiş mobil
 - ✅ Veri dışa aktarma (Export)
 - ✅ Veri temizleme
 
+### 9. Sosyal Özellikler
+
+- ✅ Arkadaş ekleme ve istek yönetimi
+- ✅ Arkadaş aktivite akışı
+- ✅ Leaderboard (sıralama tablosu)
+- ✅ Kullanıcı arama
+- ✅ Profil sayfası (avatar, bio, gizlilik)
+
+### 10. Rozetler (Badges)
+
+- ✅ Okuma başarımları ve rozet sistemi
+- ✅ Otomatik rozet kontrolü
+- ✅ Rozet sayfası (`/badges`)
+
 ---
 
 ## 🛠 Teknoloji Stack
@@ -141,10 +155,18 @@ reading-chain/
 │   │   │   ├── route.ts                # GET, POST
 │   │   │   └── [id]/route.ts           # GET, PUT, DELETE
 │   │   ├── readings/route.ts           # Okuma kayıtları
-│   │   └── stats/route.ts              # İstatistikler
+│   │   ├── stats/route.ts              # İstatistikler
+│   │   ├── profile/route.ts            # Profil
+│   │   ├── friends/                    # Arkadaşlık API
+│   │   ├── badges/route.ts             # Rozetler
+│   │   ├── leaderboard/route.ts        # Sıralama
+│   │   └── users/                      # Kullanıcı arama/profil
 │   ├── books/page.tsx                  # Kitaplar sayfası
 │   ├── login/page.tsx                  # Login sayfası
 │   ├── signup/page.tsx                 # Signup sayfası
+│   ├── friends/page.tsx                # Arkadaşlar sayfası
+│   ├── profile/page.tsx                # Profil sayfası
+│   ├── badges/page.tsx                 # Rozetler sayfası
 │   ├── stats/page.tsx                  # İstatistikler sayfası
 │   ├── settings/page.tsx               # Ayarlar sayfası
 │   ├── page.tsx                        # Ana sayfa (Dashboard)
@@ -162,7 +184,11 @@ reading-chain/
 ├── models/
 │   ├── User.ts                         # User schema
 │   ├── Book.ts                         # Book schema
-│   └── Reading.ts                      # Reading schema
+│   ├── Reading.ts                      # Reading schema
+│   ├── Friend.ts                       # Arkadaşlık schema
+│   └── UserBadge.ts                    # Rozet schema
+├── scripts/
+│   └── seed-test-data.ts               # Test verisi seed script
 ├── lib/
 │   ├── mongodb.ts                      # Mongoose connection
 │   └── mongodb-client.ts               # MongoDB client (NextAuth)
@@ -285,6 +311,26 @@ reading-chain/
 
 - `GET /api/stats?period=all` - İstatistikler
   - Periods: all, week, month, year
+
+### Profile
+
+- `GET /api/profile` - Profil bilgisi
+- `PUT /api/profile` - Profil güncelle
+
+### Friends
+
+- `GET /api/friends` - Arkadaş listesi
+- `POST /api/friends` - Arkadaşlık isteği
+- `PUT /api/friends/[id]` - İsteği kabul/reddet
+- `DELETE /api/friends/[id]` - Arkadaşlığı kaldır
+- `GET /api/friends/activity` - Arkadaş aktiviteleri
+
+### Social
+
+- `GET /api/leaderboard` - Sıralama tablosu
+- `GET /api/badges` - Kullanıcı rozetleri
+- `GET /api/users/search?q=` - Kullanıcı ara
+- `GET /api/users/[username]` - Kullanıcı profili
 
 ---
 
@@ -417,6 +463,7 @@ NEXTAUTH_URL=https://your-domain.vercel.app
 ```bash
 npm install
 npm run dev  # http://localhost:3000
+npm run seed # Test verisi yükle (opsiyonel)
 ```
 
 ### Build
@@ -450,26 +497,24 @@ NEXTAUTH_URL=http://localhost:3000
 Proje kök dizininde mevcut dokümantasyon:
 
 - `README.md` - Genel proje bilgisi
+- `QUICKSTART.md` - Hızlı başlangıç
 - `FEATURES.md` - Detaylı özellikler listesi
 - `SETUP.md` - Kurulum ve çalıştırma
-- `AUTH_SETUP_TR.md` - Authentication kurulumu (TR)
-- `GOOGLE_AUTH_SETUP.md` - Google OAuth kurulumu (artık kullanılmıyor)
+- `AUTH_SETUP_TR.md` - Kimlik doğrulama kurulumu (TR)
+- `GOOGLE_AUTH_SETUP.md` - Arşiv (Google OAuth artık kullanılmıyor)
 - `VERCEL_DEPLOYMENT.md` - Vercel deployment rehberi
+- `scripts/README.md` - Test verisi seed rehberi
 - `ICONS_GUIDE.md` - PWA icon değiştirme
-- `BAŞLANGIÇ.txt` - Türkçe proje özeti
 
 ---
 
 ## 🎯 Gelecek Özellikler (Potansiyel)
 
 - [ ] Kitap önerileri
-- [ ] Okuma arkadaşları / sosyal özellikler
-- [ ] Okuma hedefleri ve rozetler
-- [ ] Kitap notları ve alıntılar
 - [ ] Kitap arama API entegrasyonu
 - [ ] Okuma istatistikleri export (PDF/CSV)
 - [ ] Email bildirimleri
-- [ ] Mobile app (React Native)
+- [ ] Mobile app (React Native) — `docs/MOBILE_*.md` planları mevcut
 
 ---
 
@@ -483,7 +528,7 @@ Selman S.
 
 ## 📅 Tarih
 
-Ekim 2025
+Haziran 2026
 
 ---
 

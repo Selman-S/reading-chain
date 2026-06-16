@@ -35,7 +35,13 @@ MONGODB_URI=mongodb://localhost:27017/reading-chain
 
 # VEYA MongoDB Atlas için:
 # MONGODB_URI=mongodb+srv://KULLANICI:ŞİFRE@cluster0.xxxxx.mongodb.net/reading-chain
+
+# NextAuth (Gerekli!)
+AUTH_SECRET=your-secret-here
+NEXTAUTH_URL=http://localhost:3000
 ```
+
+`AUTH_SECRET` oluşturmak için: `openssl rand -base64 32`
 
 ### 3️⃣ Uygulamayı Başlatın
 
@@ -46,21 +52,33 @@ npm run dev
 
 🎉 Tarayıcıda açın: **http://localhost:3000**
 
+### 4️⃣ Test Verisi Yükle (Opsiyonel)
+
+```bash
+npm run seed
+```
+
+Giriş bilgileri: kullanıcı adı `selman`, şifre `123456`
+
 ---
 
-## 📱 İlk Kullanım (1 dakika)
+## 📱 İlk Kullanım (2 dakika)
 
-1. **Kitap Ekle**
+1. **Giriş Yap**
+   - `/signup` ile kayıt ol veya seed ile test hesabı kullan
+   - `/login` → kullanıcı adı + şifre (e-posta değil!)
+
+2. **Kitap Ekle**
    - Alt menüden "Kitaplarım"a git
    - "+" butonuna tıkla
    - Kitap bilgilerini gir
 
-2. **İlk Okuma Kaydı**
+3. **İlk Okuma Kaydı**
    - Ana sayfaya dön
    - Okuduğun sayfa sayısını gir
    - "Kaydet 🔥" butonuna bas
 
-3. **Zincirine Başla!**
+4. **Zincirine Başla!**
    - Her gün okuma kaydı ekle
    - Streakini korumaya devam et!
 
@@ -120,12 +138,14 @@ npm run dev        # Geliştirme sunucusu
 npm run build      # Production build
 npm run start      # Production sunucu
 npm run lint       # Kod kontrolü
+npm run seed       # Test verisi yükle
 ```
 
 ---
 
 ## 🔥 Özellikler
 
+✅ Kullanıcı kaydı ve giriş (NextAuth Credentials)
 ✅ Kitap yönetimi (ekle/düzenle/sil)
 ✅ Günlük okuma takibi
 ✅ Streak (zincir) sistemi
@@ -177,9 +197,12 @@ npm run build
 ## 📚 Dokümantasyon
 
 - 📖 **README.md** - Genel bilgi ve kurulum
-- 🚀 **SETUP.md** - Detaylı kurulum rehberi
+- 🚀 **QUICKSTART.md** - Hızlı başlangıç (bu dosya)
+- 🛠 **SETUP.md** - Detaylı kurulum rehberi
+- 🔐 **AUTH_SETUP_TR.md** - Kimlik doğrulama kurulumu
 - ✨ **FEATURES.md** - Tüm özellikler listesi
 - 🎨 **ICONS_GUIDE.md** - İkon değiştirme rehberi
+- 🌱 **scripts/README.md** - Test verisi seed rehberi
 
 ---
 

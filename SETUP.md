@@ -69,6 +69,14 @@ MONGODB_URI=mongodb://localhost:27017/reading-chain
 MONGODB_URI=mongodb+srv://USERNAME:PASSWORD@cluster0.xxxxx.mongodb.net/reading-chain?retryWrites=true&w=majority
 ```
 
+**NextAuth (Gerekli!):**
+```env
+AUTH_SECRET=your-generated-secret-here
+NEXTAUTH_URL=http://localhost:3000
+```
+
+`AUTH_SECRET` oluşturmak için: `openssl rand -base64 32`
+
 ⚠️ **ÖNEMLİ**: 
 - `USERNAME` ve `PASSWORD` değerlerini kendi bilgilerinizle değiştirin
 - `cluster0.xxxxx.mongodb.net` kısmını kendi cluster adresinizle değiştirin
@@ -81,19 +89,33 @@ npm run dev
 
 Tarayıcınızda [http://localhost:3000](http://localhost:3000) adresini açın.
 
+### 4. Test Verisi Yükleyin (Opsiyonel)
+
+```bash
+npm run seed
+```
+
+3 test kullanıcısı, kitaplar ve okuma kayıtları oluşturulur. Giriş: kullanıcı adı `selman`, şifre `123456`
+
+Detaylar: **[scripts/README.md](./scripts/README.md)**
+
 ## İlk Kullanım
 
-1. **Kitap Ekleyin**:
+1. **Hesap Oluşturun veya Giriş Yapın**:
+   - `/signup` ile yeni hesap oluşturun
+   - veya `npm run seed` sonrası `/login` → `selman` / `123456`
+
+2. **Kitap Ekleyin**:
    - "Kitaplarım" sekmesine gidin
    - "+" butonuna tıklayın
    - Kitap bilgilerini girin (isim, yazar, toplam sayfa)
 
-2. **İlk Okuma Kaydınızı Ekleyin**:
+3. **İlk Okuma Kaydınızı Ekleyin**:
    - Ana sayfaya dönün
    - Okuduğunuz sayfa sayısını girin
    - "Kaydet 🔥" butonuna tıklayın
 
-3. **Bildirimleri Açın** (Opsiyonel):
+4. **Bildirimleri Açın** (Opsiyonel):
    - Ayarlar sayfasına gidin
    - "Günlük Hatırlatıcı" seçeneğini açın
    - Bildirim izni verin
@@ -182,7 +204,10 @@ npm run build
 2. Kodu push edin
 3. [Vercel](https://vercel.com)'de "Import Project"
 4. Repository'yi seçin
-5. Environment Variables'a `MONGODB_URI` ekleyin
+5. Environment Variables'a ekleyin:
+   - `MONGODB_URI`
+   - `AUTH_SECRET`
+   - `NEXTAUTH_URL` (production URL)
 6. Deploy!
 
 ### MongoDB Atlas Production Ayarları

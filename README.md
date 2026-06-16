@@ -12,8 +12,10 @@ Günlük okuma alışkanlığınızı takip edin, zincirinizi kırmayın! 🔥
 - **Mobil-Öncelikli Tasarım**: Tüm cihazlarda mükemmel çalışır
 
 ### 🚀 Gelişmiş Özellikler
-- **🔐 Kullanıcı Girişi**: Google OAuth ile güvenli giriş
+- **🔐 Kullanıcı Girişi**: Kullanıcı adı/şifre ile kayıt ve giriş
 - **👤 Multi-User**: Her kullanıcı kendi verilerini görür
+- **🤝 Arkadaş Sistemi**: Arkadaş ekleme, aktivite akışı, sıralama
+- **👤 Profil**: Avatar, bio ve gizlilik ayarları
 - **🔔 Bildirimler**: Günlük hatırlatıcılar
 - **🌙 Karanlık Mod**: Gözlerinizi koruyun
 - **📱 PWA Desteği**: Uygulama gibi kurulabilir
@@ -58,17 +60,9 @@ MONGODB_URI=mongodb://localhost:27017/reading-chain
 # NextAuth (Gerekli!)
 AUTH_SECRET=your-secret-here  # openssl rand -base64 32 ile oluşturun
 NEXTAUTH_URL=http://localhost:3000
-
-# Google OAuth (Gerekli!)
-GOOGLE_CLIENT_ID=your-google-client-id
-GOOGLE_CLIENT_SECRET=your-google-client-secret
 ```
 
-**🔐 Google OAuth Kurulumu:**
-
-Detaylı adımlar için: **[GOOGLE_AUTH_SETUP.md](./GOOGLE_AUTH_SETUP.md)**
-
-Hızlı başlangıç için: **[AUTH_SETUP_TR.md](./AUTH_SETUP_TR.md)**
+**🔐 Kimlik Doğrulama Kurulumu:** **[AUTH_SETUP_TR.md](./AUTH_SETUP_TR.md)**
 
 ### 4. Uygulamayı Başlatın
 
@@ -86,10 +80,10 @@ Uygulamayı test etmek için örnek kullanıcılar ve veriler oluşturmak isters
 npm run seed
 ```
 
-Bu komut 3 test kullanıcısı oluşturacak:
-- **selman** (selman@test.com) - Şifre: 123456
-- **ahmet** (ahmet@test.com) - Şifre: 123456
-- **ayse** (ayse@test.com) - Şifre: 123456
+Bu komut 3 test kullanıcısı oluşturacak (giriş **kullanıcı adı** ile yapılır):
+- **selman** — selman@test.com — Şifre: `123456`
+- **ahmet** — ahmet@test.com — Şifre: `123456`
+- **ayse** — ayse@test.com — Şifre: `123456`
 
 Her kullanıcı için:
 - ✅ 3 kitap (bazıları tamamlanmış, bazıları aktif)
@@ -136,9 +130,11 @@ Detaylı bilgi için: **[scripts/README.md](./scripts/README.md)**
 
 ### İlk Kullanım
 
-1. **Kitap Ekleyin**: "Kitaplarım" sayfasından yeni kitap ekleyin
-2. **Sayfa Girin**: Ana sayfadan günlük okuduğunuz sayfayı girin
-3. **Streaki Başlatın**: Her gün okuyarak zincirinizi uzatın!
+1. **Hesap Oluşturun**: `/signup` sayfasından kayıt olun veya `npm run seed` ile test hesabı kullanın
+2. **Giriş Yapın**: `/login` sayfasından kullanıcı adı ve şifrenizle giriş yapın
+3. **Kitap Ekleyin**: "Kitaplarım" sayfasından yeni kitap ekleyin
+4. **Sayfa Girin**: Ana sayfadan günlük okuduğunuz sayfayı girin
+5. **Streaki Başlatın**: Her gün okuyarak zincirinizi uzatın!
 
 ### İpuçları
 
@@ -167,6 +163,13 @@ Ayarlar sayfasından günlük okuma hedefinizi özelleştirin (5-100 sayfa).
 
 ## 🔧 API Endpoints
 
+> Tüm endpoint'ler (signup hariç) giriş gerektirir.
+
+### Kimlik Doğrulama
+- `POST /api/auth/signup` - Kullanıcı kaydı
+- `POST /api/auth/callback/credentials` - Giriş (NextAuth)
+- `GET /api/auth/session` - Oturum bilgisi
+
 ### Kitaplar
 - `GET /api/books` - Tüm kitapları getir
 - `POST /api/books` - Yeni kitap ekle
@@ -180,6 +183,16 @@ Ayarlar sayfasından günlük okuma hedefinizi özelleştirin (5-100 sayfa).
 
 ### İstatistikler
 - `GET /api/stats?period=all|week|month|year` - İstatistikleri getir
+
+### Sosyal & Profil
+- `GET /api/profile` - Profil bilgisi
+- `PUT /api/profile` - Profil güncelle
+- `GET /api/friends` - Arkadaş listesi
+- `POST /api/friends` - Arkadaşlık isteği gönder
+- `GET /api/friends/activity` - Arkadaş aktiviteleri
+- `GET /api/leaderboard` - Sıralama tablosu
+- `GET /api/badges` - Rozetler
+- `GET /api/users/search?q=` - Kullanıcı ara
 
 ## 🐛 Sorun Giderme
 
@@ -229,4 +242,4 @@ Bu projeyi kullandığınız için teşekkürler! Okumanın keyfini çıkarın! 
 
 **Yapımcı**: Reading Chain Team
 **Versiyon**: 1.0.0
-**Güncelleme**: Ekim 2024
+**Güncelleme**: Haziran 2026
