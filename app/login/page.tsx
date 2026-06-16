@@ -36,7 +36,11 @@ function LoginForm() {
       });
 
       if (result?.error) {
-        setError('Kullanıcı adı veya şifre hatalı');
+        if (result.error.startsWith('database_error') || result.error === 'Configuration') {
+          setError('Veritabanına bağlanılamıyor. MongoDB bağlantı ayarlarını kontrol edin.');
+        } else {
+          setError('Kullanıcı adı veya şifre hatalı');
+        }
         setLoading(false);
         return;
       }

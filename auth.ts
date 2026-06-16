@@ -44,7 +44,10 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           };
         } catch (error) {
           console.error("Auth error:", error);
-          return null;
+          // Surface DB errors instead of masking as wrong password
+          const message =
+            error instanceof Error ? error.message : "Database connection failed";
+          throw new Error(`database_error:${message}`);
         }
       },
     }),
